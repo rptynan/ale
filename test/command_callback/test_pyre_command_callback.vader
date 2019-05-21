@@ -44,3 +44,9 @@ Execute(Pipenv is detected when python_pyre_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyre persistent'
+
+Execute(Pyre local config should be passed as option if it exists):
+  call ale#test#SetFilename('../pyre-test-files/has-pyre-local-config/package-name/module.py')
+  let b:conf = ale#path#Simplify(g:dir . '/../pyre-test-files/has-pyre-local-config/.pyre_configuration.local')
+
+  AssertLinter 'pyre', ale#Escape('pyre') . ' -l pyre-test-files/has-pyre-local-config persistent'

@@ -21,7 +21,14 @@ function! ale_linters#python#pyre#GetCommand(buffer) abort
     \   ? ' run pyre persistent'
     \   : ' persistent'
 
-    return ale#Escape(l:executable) . l:exec_args
+    let l:local_config = ale#path#FindNearestFile(a:buffer, '.pyre_configuration.local')
+    let l:local_config_args = !empty(l:local_config)
+    \   ? ' -l ' . fnamemodify(l:local_config, ':h')
+    \   : ''
+
+    return ale#Escape(l:executable)
+    \   . l:local_config_args
+    \   . l:exec_args
 endfunction
 
 call ale#linter#Define('python', {
